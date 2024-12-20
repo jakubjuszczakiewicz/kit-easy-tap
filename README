@@ -1,0 +1,20 @@
+How to use?
+
+Prepare kit-easy-tap command (cmake -> sudo make install should do it):
+
+chown root:root kit-easy-tap
+chmod +s kit-easy-tap
+
+E.g. After that:
+
+kit-easy-tap kvm%u:lanbr0 kvm_tap.txt \
+qemu-system-x86_64 -M q35,accel=kvm -m $((1024 * 4)) \
+-cpu qemu64,+aes,+ssse3,+sse4_1,+sse4_2,+xsave,+avx \
+-smp 6,sockets=1,cores=3,threads=2 -netdev 'tap,ifname=<TAP>,id=n0,script=no' \
+-device rtl8139,mac=52:54:00:01:23:45,netdev=n0 -rtc base=utc
+
+and got qemu x86_64 KVM VM as normal user with TAP interface connected to lanbr0
+bridge without any extra things.
+
+WARNING: do not demonize process started by this tool! It disallow to remove TAP
+device after process finish. Instead of that try to demonize this tool.
